@@ -1,22 +1,23 @@
-﻿# CMakeList.txt : CMake project for keygen, include source and define
-# project specific logic here.
+﻿
+#==============================================================================
 #
+#
+#                            KEYGEN PASSWORD GENERATOR
+#
+#
+#==============================================================================
+
 CMAKE_MINIMUM_REQUIRED (VERSION 3.8)
 
 ENABLE_TESTING ()
 
-FIND_PACKAGE (GTest REQUIRED)
-INCLUDE_DIRECTORIES (${GTEST_INCLUDE_DIRS})
+OPTION (DEBUG_BUILD "Build with extra debug messages and assertions.")
 
-#[==[ DISABLED glog FOR NOW
-FIND_PACKAGE (glog REQUIRED)
-
-IF (glog_FOUND)
-	MESSAGE ("Successfully found glog")
-ELSE ()
-	MESSAGE (FATAL_ERROR "Could not find glog")
+IF (DEBUG_BUILD)
+	MESSAGE ("Debug mode enabled...")
 ENDIF ()
-#]==]
+
+FIND_PACKAGE (GTest REQUIRED)
 
 FIND_PACKAGE (Boost 1.67.0 REQUIRED COMPONENTS program_options)
 
@@ -30,14 +31,24 @@ IF (WIN32)
 	MESSAGE ("Compiling on Windows platform...")
 ENDIF ()
 
-# TODO: Add source to this project's executable.
-#ADD_EXECUTABLE (keygen keygen.cpp keygen.h)
-ADD_EXECUTABLE (keygen keygen.cpp)
+SET (SOURCE_FILES
+	keygen.cpp
+)
+
+SET (SOURCE_HEADERS
+	include/keygen/keygen.h
+)
+
+ADD_EXECUTABLE (keygen ${SOURCE_FILES} ${SOURCE_HEADERS})
+
+TARGET_INCLUDE_DIRECTORIES (keygen PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/include/keygen
+	${GTEST_INCLUDE_DIRS}
+)
 
 TARGET_LINK_LIBRARIES (keygen
 	PRIVATE
 		Boost::program_options
-		#glog::glog
 		GTest::Main
 		GTest::GTest
 )
