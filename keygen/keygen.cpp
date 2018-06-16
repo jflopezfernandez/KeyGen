@@ -33,9 +33,12 @@
  *
  *  ***************************************************************************
  *
- *  @author Jose Fernando Lopez Fernandez
- *  @date 15-June-2018
- *  @brief This is the main keygen driver file
+ *  @file       keygen.cpp
+ *  @author     Jose Fernando Lopez Fernandez
+ *  @date       15-June-2018
+ *  @version    1.0.0
+ *  
+ *  @brief      This is the main keygen driver file
  *
  *  Tasks:
  *      1. @todo Add file details
@@ -45,7 +48,6 @@
 
 #include <keygen.h>
 
-#include <cstdlib>
 #include <boost/program_options.hpp>
 #include <gtest/gtest.h>
 
@@ -55,9 +57,14 @@ namespace Dummy {
     }
 }
 
-TEST(GTestConfig, TrivialTest)
+TEST(GTestConfigDummyTest, ReturnOne)
 {
     EXPECT_EQ(1, Dummy::ReturnOne());
+}
+
+TEST(GTestConfigDummyTest, ReturnTwo)
+{
+    EXPECT_EQ(2, Dummy::ReturnOne() * 2);
 }
 
 int main(int argc, char *argv[])
