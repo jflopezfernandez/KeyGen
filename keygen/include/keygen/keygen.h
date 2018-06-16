@@ -46,20 +46,22 @@
 #ifndef KEYGEN_KEYGEN_H_
 #define KEYGEN_KEYGEN_H_
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cstddef>
-#include <cstdint>
-#include <cerrno>
-#include <csignal>
-#include <cmath>
-#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <errno.h>
+#include <signal.h>
+#include <math.h>
+#include <time.h>
 
+#include <limits>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #endif // KEYGEN_KEYGEN_H_
 
