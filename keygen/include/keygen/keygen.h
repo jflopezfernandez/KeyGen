@@ -57,6 +57,9 @@
 #include <ctime>
 
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <string_view>
 
 #endif // KEYGEN_KEYGEN_H_
 

@@ -40,36 +40,117 @@
  *  
  *  @brief      This is the main keygen driver file
  *
- *  Tasks:
- *      1. @todo Add file details
- *      2. @todo Add file details
+ *  Requirements:
+ *      1. @todo Calculate password entropy
+ *      2. @todo Generate a password
+ *      3. @todo Add program options
+ *         a. @todo Specify number of passwords to generate
+ *      4. @todo Set minimum tolerable entropy for generated passwords
  *
  *  **************************************************************************/
 
 #include <keygen.h>
 
+#include <boost/optional.hpp>
 #include <boost/program_options.hpp>
-#include <gtest/gtest.h>
 
+#ifndef NDEBUG
+#include <gtest/gtest.h>
+#endif // NDEBUG
+
+#ifndef NDEBUG
 namespace Dummy {
     int ReturnOne() {
         return 1;
     }
+
+    TEST(GTestConfigDummyTest, ReturnOne)
+    {
+        EXPECT_EQ(1, Dummy::ReturnOne());
+    }
+
+    TEST(GTestConfigDummyTest, ReturnTwo)
+    {
+        EXPECT_EQ(2, Dummy::ReturnOne() * 2);
+    }
+
+    int Factorial(int n)
+    {
+        return 1;
+    }
+
+    TEST(GTestConfigDummyTest, Factorial)
+    {
+        EXPECT_EQ(1, Factorial(0));
+    }
+}
+#endif // NDEBUG
+
+namespace ProgramOptions = boost::program_options;
+using OptionsDescription = boost::program_options::options_description;
+
+void LogMsg(const std::string_view& message)
+{
+    std::cout << "[LOG]: " << message << "\n";
 }
 
-TEST(GTestConfigDummyTest, ReturnOne)
+void PrintHelp() noexcept
 {
-    EXPECT_EQ(1, Dummy::ReturnOne());
+    // @todo Implement PrintHelp()
+    std::cout << "<Print Help>\n";
+
+    exit(EXIT_FAILURE);
 }
 
-TEST(GTestConfigDummyTest, ReturnTwo)
+void PrintVersion() noexcept
 {
-    EXPECT_EQ(2, Dummy::ReturnOne() * 2);
+    // @todo Implement PrintVersion()
+    std::cout << "<Print Version>\n";
+
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char *argv[])
 {
-    testing::InitGoogleTest(&argc, argv);
+    std::size_t numberOfPasswordsToGenerate = 10u;
 
+    OptionsDescription options("Generic options");
+    options.add_options()
+        ("help,h", "Display this help dialog")
+        ("version", "Display program version and exit")
+        ("verbose,v", "Set program output verbosity to 'verbose'")
+        ("number-to-generate,N", ProgramOptions::value<std::size_t>(&numberOfPasswordsToGenerate)->default_value(10), "Number of cryptographically strong passwords for the application to generate")
+    ; // End of genericOptions.add_options()
+
+    ProgramOptions::variables_map map;
+    ProgramOptions::store(ProgramOptions::parse_command_line(argc, argv, options), map);
+    ProgramOptions::notify(map);
+
+    if (map.count("help")) {
+        PrintHelp();
+    }
+
+    if (map.count("version")) {
+        PrintVersion();
+    }
+
+    if (map.count("verbose")) {
+        std::stringstream stream;
+
+        stream << "Number of passwords to generate: " << numberOfPasswordsToGenerate << "\n";
+
+        LogMsg(stream.str());
+    }
+
+#ifndef NDEBUG
+    testing::InitGoogleTest(&argc, argv);
+#endif
+
+    // @todo Main program functionality goes here
+
+#ifndef NDEBUG
     return RUN_ALL_TESTS();
+#else
+    return EXIT_SUCCESS;
+#endif
 }

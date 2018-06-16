@@ -58,5 +58,5 @@ TARGET_LINK_LIBRARIES (keygen
 
 TARGET_COMPILE_FEATURES (keygen
 	PRIVATE
-		cxx_std_11
+		cxx_std_17
 )
