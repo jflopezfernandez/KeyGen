@@ -56,7 +56,7 @@
 #error "For security purposes, do not define '_CRT_SECURE_NO_WARNINGS'"
 #endif
 
-#include <keygen.h>
+#include "include/keygen.h"
 
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
@@ -177,6 +177,7 @@ namespace StringOperations
         return false;
     }
 
+#ifndef NDEBUG
     TEST(SubstringTest, NotASubstring)
     {
         EXPECT_FALSE(AisASubstringOfB("A", "BCD"));
@@ -196,6 +197,7 @@ namespace StringOperations
         EXPECT_TRUE(AisASubstringOfB("aaa", "aaa"));
         EXPECT_TRUE(AisASubstringOfB("", ""));
     }
+#endif // NDEBUG
 }
 
 namespace Password
@@ -231,6 +233,7 @@ namespace Password
         return (password.length() * (log(95) / log(2)));
     }
 
+#ifndef NDEBUG
     ::testing::AssertionResult AssertBothFloatingPointNumbersAreRoughlyEqual(const char *m_expr, const char *n_expr, const double m, const double n)
     {
         if (abs(m - n) < 0.05) {
@@ -255,6 +258,7 @@ namespace Password
         //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcdefg" , GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 45.99);
         //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcdefgh", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 52.56);
     }
+#endif // NDEBUG
 
     // @todo Implement generatePassword()
     // @todo Pass in parameters, such as length, minimum entropy, legal chars, etc.
