@@ -130,29 +130,6 @@ void LogMsg(const std::string_view& message)
     std::cout << "[LOG]: " << message << "\n";
 }
 
-// Disabled
-// Question: am I supposed to pass these arguments in by value or by reference?
-// Idea: template function?
-//template <typename T>
-//bool AisElementOfB(const T& element, const std::vector<T>& set) noexcept
-//{
-//    // @todo Implement AisElementOfB()
-//    // @disabled:
-//    //for (typename std::vector<T>::iterator iterator = set.begin(); iterator != set.end(); ++iterator) {
-//    //    if (std::strcmp(element, iterator) == 0) {
-//    //        return true;
-//    //    }
-//    //}
-//
-//    for (auto c = 0u; c <= set.size(); ++c) {
-//        if (std::strcmp(element, set[c]) == 0) {
-//            return true;
-//        }
-//    }
-//
-//    return false;
-//}
-
 namespace StringOperations
 {
     // @todo Implement AisASubstringOfB()
@@ -189,6 +166,7 @@ namespace StringOperations
     {
         EXPECT_TRUE(AisASubstringOfB("b", "abc"));
         EXPECT_TRUE(AisASubstringOfB("YE", "YES"));
+        EXPECT_TRUE(AisASubstringOfB("Jose", "JoseaFernando"));
         EXPECT_TRUE(AisASubstringOfB("Jose", "Jose Fernando"));
     }
 
@@ -202,32 +180,6 @@ namespace StringOperations
 
 namespace Password
 {
-    /** Disabled for now
-    double calculateEntropy(const std::string_view& password, const size_t charSetSize) noexcept
-    {
-        // @todo Create table/list of characters seen at least once in password
-        std::string uniqueCharactersInPassword { };
-
-        // Refactor to iterator for loop
-        for (auto c = 0u; c < password.length(); c++) {
-            // @todo Check to make sure the character is not already in the table
-            // @todo Fix this
-            // If not in list:
-            if (StringOperations::AisASubstringOfB(&password[c], uniqueCharactersInPassword.c_str())) {
-                uniqueCharactersInPassword += password[c];
-            } else {
-                continue;
-            }
-        }
-
-        // @todo Using all possible characters in keyboard for now
-        
-
-
-        // @todo Return an actual value
-        return -1;
-    }*/
-
     inline double calculateShannonEntropy(const std::string_view& password, const size_t charSetSize) noexcept
     {
         return (password.length() * (log(95) / log(2)));
@@ -252,11 +204,6 @@ namespace Password
         AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdef\",   GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "39.42", calculateShannonEntropy("abcdef",   GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 39.42);
         AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdefg\",  GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "45.99", calculateShannonEntropy("abcdefg",  GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 45.99);
         AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdefgh\", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "52.56", calculateShannonEntropy("abcdefgh", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 52.56);
-
-        //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcde"   , GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 32.85);
-        //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcdef"  , GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 39.42);
-        //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcdefg" , GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 45.99);
-        //EXPECT_DOUBLE_EQ(calculateShannonEntropy("abcdefgh", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 52.56);
     }
 #endif // NDEBUG
 
@@ -273,7 +220,7 @@ namespace Password
 
 void PrintHelp() noexcept
 {
-    // @todo Implement PrintHelp()
+    // @todo Implement PrintHelp() function
     std::cout << "<Print Help>\n";
 
     exit(EXIT_FAILURE);
@@ -292,10 +239,14 @@ struct Version {
     }
 };
 
+const Version ProgramVersion;
+
 void PrintVersion() noexcept
 {
     // @todo Implement PrintVersion()
-    std::cout << "<Print Version>\n";
+    std::cout << "\n\n\t\t\t";
+    std::cout << "KeyGen - Version " << ProgramVersion << "\n\t\t";
+    std::cout << "Jose Fernando Lopez Fernandez" << "\n";
 
     exit(EXIT_FAILURE);
 }

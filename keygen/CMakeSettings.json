@@ -1,13 +1,17 @@
 {
   // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
+  "environments": [
+    {
+      "BuildDir": "${env.USERPROFILE}\\CMakeBuilds\\KeyGen\\build"
+    }
+  ],
   "configurations": [
     {
       "name": "x86-Debug",
       "generator": "Visual Studio 15 2017",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x86" ],
-      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "buildRoot": "${env.BuildDir}\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "'C:\\Program Files\\CMake\\bin\\cmake.exe' -m -v:minimal",
       "ctestCommandArgs": "",
@@ -15,6 +19,10 @@
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
           "value": "C:\\Source-Code\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "PROJECT_NAME",
+          "value": "KeyGen"
         }
       ]
     },
@@ -23,8 +31,7 @@
       "generator": "Visual Studio 15 2017",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x86" ],
-      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "buildRoot": "${env.BuildDir}\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
@@ -32,6 +39,10 @@
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
           "value": "C:\\Source-Code\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "PROJECT_NAME",
+          "value": "KeyGen"
         }
       ]
     },
@@ -40,8 +51,7 @@
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "buildRoot": "${env.BuildDir}\\${name}",
       "cmakeCommandArgs": "-T host=x64",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
@@ -49,6 +59,10 @@
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
           "value": "C:\\Source-Code\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "PROJECT_NAME",
+          "value": "KeyGen"
         }
       ]
     },
@@ -57,8 +71,7 @@
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "buildRoot": "${env.BuildDir}\\${name}",
       "cmakeCommandArgs": "-T host=x64",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
@@ -66,6 +79,10 @@
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
           "value": "C:\\Source-Code\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+        },
+        {
+          "name": "PROJECT_NAME",
+          "value": "KeyGen"
         }
       ]
     },
