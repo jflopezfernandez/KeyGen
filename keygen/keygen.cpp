@@ -370,9 +370,12 @@ int main(int argc, char *argv[])
     // @todo Modularize this into a separate time module
     struct tm newtime;
     char am_pm[] = "AM";
+    // @todo Compatibility error: __time64_t not recognized on linux
     __time64_t long_time;
     char timebuf[26];
-    _time64(&long_time);
+    // @todo Compatibility error: _time64 function call not recognized on linux
+    _time64(&long_time); 
+    // @todo Compatibility error: errno_t not recognized on linux
     errno_t err = _localtime64_s(&newtime, &long_time);
 
     if (err) {
@@ -394,6 +397,7 @@ int main(int argc, char *argv[])
          *
          */
 
+	// @todo Compatibility error: strcpy_s not recognized on linux
         strcpy_s(static_cast<char *>(am_pm), sizeof am_pm, "PM");
     }
 
@@ -406,6 +410,7 @@ int main(int argc, char *argv[])
     }
 
     // Convert to an ASCII representation
+    // @todo Compatibility error: asctime_s not recognized on linux
     err = asctime_s(static_cast<char *>(timebuf), 26, &newtime);
 
     if (err) {
