@@ -6,6 +6,15 @@
 #
 #
 #==============================================================================
+#
+# WriteCompilerDetectionHeader: Disabled - 18-June-2018 (7:41 PM)
+# 
+# The point of this string view build feature is to test whether the current
+# compiler includes support for C++17. However, the module has been a pain to
+# get working on both Windows and Linux, so I will be disabling it indefinitely
+# until I can get a better handle on the API.
+#
+#==============================================================================
 
 CMAKE_MINIMUM_REQUIRED (VERSION 3.8 FATAL_ERROR)
 
@@ -24,22 +33,22 @@ MESSAGE ("Current Source Dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 ENABLE_TESTING ()
 
-INCLUDE (WriteCompilerDetectionHeader)
+#INCLUDE (WriteCompilerDetectionHeader)
 
-SET (GEN_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/generated/)
+#SET (GEN_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/generated/)
 
-WRITE_COMPILER_DETECTION_HEADER (
-	FILE
-		${GEN_INCLUDE}/keygen_compiler_detection.h
-	PREFIX
-		${PROJECT_NAME}
-	COMPILERS
-		Clang
-		GNU
-		MSVC
-	FEATURES
-		cxx_std_17
-)
+#WRITE_COMPILER_DETECTION_HEADER (
+#	FILE
+#		${GEN_INCLUDE}/keygen_compiler_detection.h
+#	PREFIX
+#		${PROJECT_NAME}
+#	COMPILERS
+#		Clang
+#		GNU
+#		MSVC
+#	FEATURES
+#		cxx_std_17
+#)
 
 OPTION (DEBUG_BUILD "Build with extra debug messages and assertions.")
 
@@ -88,15 +97,15 @@ SET (BOOST_OPTIONAL_INCLUDE_DIR
 	"C:\\Source-Code\\vcpkg\\packages\\boost-optional_x64-windows\\include\\"
 )
 
-ADD_LIBRARY (StrView INTERFACE)
-SET (WITH_STRING_VIEW ${CMAKE_CURRENT_SOURCE_DIR}/WITH_STRING_VIEW)
-SET (NO_STRING_VIEW ${CMAKE_CURRENT_SOURCE_DIR}/NO_STRING_VIEW)
+#ADD_LIBRARY (StrView INTERFACE)
+#SET (WITH_STRING_VIEW ${CMAKE_CURRENT_SOURCE_DIR}/WITH_STRING_VIEW)
+#SET (NO_STRING_VIEW ${CMAKE_CURRENT_SOURCE_DIR}/NO_STRING_VIEW)
 
-TARGET_INCLUDE_DIRECTORIES (StrView
-	INTERFACE
-		"$<$<COMPILE_FEATURES:cxx_std_17>:${with_string_view}>"
-		"$<$<NOT:$<COMPILE_FEATURES:cxx_std_17>>:${no_string_view}>"
-)
+#TARGET_INCLUDE_DIRECTORIES (StrView
+#	INTERFACE
+#		"$<$<COMPILE_FEATURES:cxx_std_17>:${with_string_view}>"
+#		"$<$<NOT:$<COMPILE_FEATURES:cxx_std_17>>:${no_string_view}>"
+#)
 
 TARGET_INCLUDE_DIRECTORIES (${PROJECT_NAME} BEFORE
 	PUBLIC
@@ -104,12 +113,12 @@ TARGET_INCLUDE_DIRECTORIES (${PROJECT_NAME} BEFORE
 		${Boost_INCLUDE_DIRS}
 		${BOOST_OPTIONAL_INCLUDE_DIR}
 		${GTEST_INCLUDE_DIRS}
-		"$<BUILD_INTERFACE:${GEN_INCLUDE}>"
+		#"$<BUILD_INTERFACE:${GEN_INCLUDE}>"
 )
 
 TARGET_LINK_LIBRARIES (${PROJECT_NAME}
 	PUBLIC
-		StrView
+		#StrView
 		${Boost_LIBRARIES}
 		GTest::Main
 		GTest::GTest
@@ -123,18 +132,18 @@ SET_TARGET_PROPERTIES (${PROJECT_NAME}
 		CXX_STANDARD 17
 )
 
-ADD_EXECUTABLE (KeyGenNoStrView
-	${SOURCE_FILES}
-	${NO_STRING_VIEW}
-	${SOURCE_HEADERS}
-)
+#ADD_EXECUTABLE (KeyGenNoStrView
+#	${SOURCE_FILES}
+#	${NO_STRING_VIEW}
+#	${SOURCE_HEADERS}
+#)
 
-TARGET_LINK_LIBRARIES (KeyGenNoStrView StrView)
+#TARGET_LINK_LIBRARIES (KeyGenNoStrView StrView)
 
-SET_TARGET_PROPERTIES (KeyGenNoStrView
-	PROPERTIES
-		CXX_STANDARD 17
-)
+#SET_TARGET_PROPERTIES (KeyGenNoStrView
+#	PROPERTIES
+#		CXX_STANDARD 17
+#)
 
 TARGET_COMPILE_FEATURES (${PROJECT_NAME}
 	PUBLIC
@@ -144,16 +153,16 @@ TARGET_COMPILE_FEATURES (${PROJECT_NAME}
 		cxx_final
 )
 
-INSTALL (
-	FILES
-		"${CMAKE_CURRENT_BINARY_DIR}/keygen_compiler_detection.h"
-	DESTINATION
-		include
-)
+#INSTALL (
+#	FILES
+#		"${CMAKE_CURRENT_BINARY_DIR}/keygen_compiler_detection.h"
+#	DESTINATION
+#		include
+#)
 
-INSTALL (
-	FILES
-		${support_files}
-	DESTINATION
-		include/compilers
-)
+#INSTALL (
+#	FILES
+#		${support_files}
+#	DESTINATION
+#		include/compilers
+#)
