@@ -47,63 +47,24 @@
  *         a. Specify number of passwords to generate
  *      4. Set minimum tolerable entropy for generated passwords
  *
+ *  ***************************************************************************
+ *
+ *   @todo Main program functionality
+ *   1. @todo Calculate password entropy
+ *   2. @todo Generate a password
+ *   3. @todo Add program options
+ *      a. @todo Specify number of passwords to generate
+ *   4. @todo Set minimum tolerable entropy for generated passwords
+ *   5. @todo Initialize pseudo-random number generator
+ * 
+ *  Password entropy = log(2)(pool of unique characters^number of characters in
+ *  password)
+ *
  *  **************************************************************************/
 
-#define TRUE  1
-#define FALSE 0
+#include "keygen.h"
 
-/** @def _CRT_SECURE_NO_WARNINGS
- *  @brief This preprocessor definition disables Visual Studio's warnings
- *  when not using the safe string functions provided by the MSVC runtime.
- *
- *  Disable the safe string library due to its lack of compatibility with
- *  *nix systems.
- *
- */
-
-#define _CRT_SECURE_NO_WARNINGS
-
-#ifndef _CRT_SECURE_NO_WARNINGS
-#error "The safe string library is not compatible with *nix systems"
-#endif
-
-#include "include/keygen.h"
-
-#include <boost/optional.hpp>
-#include <boost/program_options.hpp>
-
- /** Include Microsoft's Guideline Support Library (GSL). 
- *
- *  The Guideline Support Library (GSL) contains functions and types that are
- *  suggested for use by the C++ Core Guidelines maintained by the Standard C++
- *  Foundation. This repo contains Microsoft's implementation of GSL.
- *
- *  The library includes types like span<T>, string_span, owner<> and others.
- *
- *  The entire implementation is provided inline in the headers under the gsl
- *  directory. The implementation generally assumes a platform that implements
- *  C++14 support. There are specific workarounds to support MSVC 2015.
- *
- *  While some types have been broken out into their own headers
- *  (e.g. gsl/span), it is simplest to just include gsl/gsl and gain access to
- *  the entire library.
- *
- */
-
-#include <gsl/gsl>
-
-#ifndef NDEBUG
-
-// @todo Add GTest documentation link here
-// GTest (https://github.com/google/googletest)
-
-#include <gtest/gtest.h>
-
-#endif // NDEBUG
-
-#include <chrono>
-#include <iostream>
-
+#pragma region PROGRAM_CONFIG
 /** @struct GlobalConstants 
  *  @brief This struct declares constants without polluting the global
  *  namespace.
@@ -126,158 +87,6 @@ struct DefaultConfiguration {
     static constexpr auto DEFAULT_PASSWORDS_LENGTH = 12u;
 };
 
-#ifndef NDEBUG
-namespace Dummy {
-    int ReturnOne() {
-        return 1;
-    }
-
-    TEST(GTestConfigDummyTest, ReturnOne)
-    {
-        EXPECT_EQ(1, Dummy::ReturnOne());
-    }
-
-    TEST(GTestConfigDummyTest, ReturnTwo)
-    {
-        EXPECT_EQ(2, Dummy::ReturnOne() * 2);
-    }
-}
-
-// @todo Figure out why test isn't running
-namespace Tutorial
-{
-    // @todo Implement Factorial()
-    int Factorial(const int n)
-    {
-        return ((n <= 1) ? 1 : n * Factorial(n - 1));
-    }
-
-    TEST(FactorialTest, HandlesZeroInput)
-    {
-        EXPECT_EQ(Factorial(0), 1);
-    }
-
-    TEST(FactorialTest, HandlesPositiveNumbers)
-    {
-        EXPECT_EQ(Factorial(1),     1);
-        EXPECT_EQ(Factorial(2),     2);
-        EXPECT_EQ(Factorial(3),     6);
-        EXPECT_EQ(Factorial(6),   720);
-        // Error: Figure out if this is blowing the stack
-        //EXPECT_EQ(Factorial(8), 40320);
-    }
-}
-#endif // NDEBUG
-
-namespace ProgramOptions = boost::program_options;
-using OptionsDescription = boost::program_options::options_description;
-
-void LogMsg(const std::string_view& message)
-{
-    std::clog << "[LOG]: " << message << "\n";
-}
-
-// @todo Figure out why test isn't running
-namespace StringOperations
-{
-    // @todo Implement AisASubstringOfB()
-    bool AisASubstringOfB(const char *testString, const char *hostString)
-    {
-        // Test to see if they are the same string
-        // If they are, return true; technically a string is a substring of itself
-
-        // @todo Figure out if this was the problem
-#if DISABLED
-        /*if (strcmp(testString, hostString) == 0) {
-            return true;
-        }*/
-
-        /*for (auto i = 0u; i < std::strlen(hostString); ++i) {
-            for (auto j = i; j < std::strlen(hostString); ++j) {
-                const auto substring = std::strstr(testString, hostString);
-
-                if (substring) {
-                    return true;
-                }
-            }
-        }*/
-#endif // DISABLED
-        return false;
-    } // End: AisASubstringOfB(const char *testString, const char *hostString)
-
-#ifndef NDEBUG
-    TEST(SubstringTest, NotASubstring)
-    {
-        EXPECT_FALSE(AisASubstringOfB("A", "BCD"));
-        EXPECT_FALSE(AisASubstringOfB("f", "dd"));
-    }
-
-    // @todo Last case is failing, probably because of the space; fix it
-    TEST(SubstringTest, YesASubstring)
-    {
-        EXPECT_TRUE(AisASubstringOfB("b", "abc"));
-        EXPECT_TRUE(AisASubstringOfB("YE", "YES"));
-        EXPECT_TRUE(AisASubstringOfB("Jose", "JoseaFernando"));
-        EXPECT_TRUE(AisASubstringOfB("Jose", "Jose Fernando"));
-    }
-
-    TEST(SubstringTest, SameString)
-    {
-        EXPECT_TRUE(AisASubstringOfB("aaa", "aaa"));
-        EXPECT_TRUE(AisASubstringOfB("", ""));
-    }
-#endif // NDEBUG
-}
-
-// @todo Figure out why test is not running
-namespace Password
-{
-    inline double calculateShannonEntropy(const std::string_view& password, const size_t charSetSize) noexcept
-    {
-        return (password.length() * (log(95) / log(2)));
-    }
-
-#ifndef NDEBUG
-    ::testing::AssertionResult AssertBothFloatingPointNumbersAreRoughlyEqual(const char *m_expr, const char *n_expr, const double m, const double n)
-    {
-        if (abs(m - n) < 0.05) {
-            return ::testing::AssertionSuccess();
-        }
-
-        return ::testing::AssertionFailure()
-            << m_expr << " and " << n_expr << " (" << m << " and " << n << ") are not equal, or at least within 0.05 of each other.\n";
-    }
-
-    // Question: Handle a password of invalid length, maybe? If it's possible
-
-    TEST(EntropyCalculation, HandlesNormalLengthPasswords)
-    {
-        AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcde\",    GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "32.85", calculateShannonEntropy("abcde",    GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 32.85);
-        AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdef\",   GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "39.42", calculateShannonEntropy("abcdef",   GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 39.42);
-        AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdefg\",  GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "45.99", calculateShannonEntropy("abcdefg",  GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 45.99);
-        AssertBothFloatingPointNumbersAreRoughlyEqual("calculateShannonEntropy(\"abcdefgh\", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS)", "52.56", calculateShannonEntropy("abcdefgh", GlobalConstants::NUMBER_OF_PRINTABLE_CHARACTERS), 52.56);
-    }
-#endif // NDEBUG
-
-    // @todo Implement generatePassword()
-    // @todo Pass in parameters, such as length, minimum entropy, legal chars, etc.
-    std::string generatePassword() noexcept
-    {
-        return "NULL";
-    }
-
-    // @todo Test suite for password generation
-    // @todo Test suite for entropy calculation
-} // End namespace Password
-
-void PrintHelp() noexcept
-{
-    // @todo Implement PrintHelp() function
-    std::cout << "<Print Help>\n";
-
-    exit(EXIT_FAILURE);
-}
-
 class Version {
     using Number = unsigned int;
 
@@ -298,6 +107,30 @@ public:
 
 const Version ProgramVersion;
 
+namespace ProgramOptions = boost::program_options;
+using OptionsDescription = boost::program_options::options_description;
+
+#pragma endregion
+
+#pragma region ERROR
+
+void LogMsg(const std::string_view& message)
+{
+    std::clog << "[LOG]: " << message << "\n";
+}
+
+#pragma endregion 
+
+#pragma region COMMAND_LINE_OPTS
+
+void PrintHelp() noexcept
+{
+    // @todo Implement PrintHelp() function
+    std::cout << "<Print Help>\n";
+
+    exit(EXIT_FAILURE);
+}
+
 void PrintVersion() noexcept
 {
     // @todo Implement PrintVersion()
@@ -308,14 +141,31 @@ void PrintVersion() noexcept
     exit(EXIT_FAILURE);
 }
 
+#pragma endregion
+
+namespace Dummy
+{
+    TEST(TestingGTestConfiguration, ReturnsOne)
+    {
+        EXPECT_EQ(1, 1);
+    }
+
+    TEST(TestingGTestConfiguration, ReturnsTwo)
+    {
+        EXPECT_EQ(2, 2);
+    }
+}
+
 int main(int argc, char *argv[])
 {
+#pragma region PROGRAM_OPTIONS
     std::size_t numberOfPasswordsToGenerate = DefaultConfiguration::DEFAULT_PASSWORDS_AMOUNT;
     std::size_t passwordLength              = DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH;
 
     OptionsDescription options("Generic options");
     options.add_options()
-        ("help,h", "Display this help dialog")
+        // @todo Reenable this option once GTest bugs have been ironed out
+        //("help,h", "Display this help dialog")
         ("version", "Display program version and exit")
         ("verbose,v", "Set program output verbosity to 'verbose'")
         ("number-to-generate,N", ProgramOptions::value<std::size_t>(&numberOfPasswordsToGenerate)->default_value(10), "Number of cryptographically strong passwords for the application to generate")
@@ -373,36 +223,9 @@ int main(int argc, char *argv[])
             passwordLength = DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH;
         }
     }
+#pragma endregion
 
-    // @todo Initialize pseudo-random number generator
+    ::testing::InitGoogleTest(&argc, argv);
 
-#ifndef NDEBUG
-    testing::InitGoogleTest(&argc, argv);
-#endif
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  @todo Main program functionality goes here
-    //
-    //  1. @todo Calculate password entropy
-    //  2. @todo Generate a password
-    //  3. @todo Add program options
-    //     a. @todo Specify number of passwords to generate
-    //  4. @todo Set minimum tolerable entropy for generated passwords
-    //
-    // Password entropy = log(2)(pool of unique characters^number of characters in password)
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    const std::chrono::system_clock::time_point CURRENT_TIME = std::chrono::system_clock::now();
-
-    std::time_t now = std::chrono::system_clock::to_time_t(CURRENT_TIME - std::chrono::hours(24));
-
-    std::cout << "Current Time: " << std::put_time(std::localtime(&now), "%F %T") << "\n";
-    
-#ifndef NDEBUG
     return RUN_ALL_TESTS();
-#else
-    return EXIT_SUCCESS;
-#endif
 }

@@ -1,4 +1,4 @@
-﻿
+
 /** ***************************************************************************
 *
 *  Copyright 2018 Jose Fernando Lopez Fernandez - All Rights Reserved
@@ -43,79 +43,29 @@
 *
 *  **************************************************************************/
 
-#ifndef KEYGEN_KEYGEN_H_
-#define KEYGEN_KEYGEN_H_
+#ifndef KEYGEN_PASSWORD_H_
+#define KEYGEN_PASSWORD_H_
 
-#define TRUE  1
-#define FALSE 0
+// @todo Add file content
 
-/** @def _CRT_SECURE_NO_WARNINGS
-*  @brief This preprocessor definition disables Visual Studio's warnings
-*  when not using the safe string functions provided by the MSVC runtime.
-*
-*  Disable the safe string library due to its lack of compatibility with
-*  *nix systems.
-*
-*/
+// @todo Implement password as class
+// @todo Design password class
+namespace Password
+{
+    inline double calculateShannonEntropy(const std::string_view& password, const size_t charSetSize) noexcept
+    {
+        return (password.length() * (log(95) / log(2)));
+    }
 
-#define _CRT_SECURE_NO_WARNINGS
+    // @todo Implement generatePassword()
+    // @todo Add the ability to specify legal character set
+    std::string generatePassword(const std::size_t characters, const double minimumEntropy) noexcept
+    {
+        return "NULL";
+    }
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#error "The safe string library is not compatible with *nix systems"
-#endif
+    // @todo Test suite for password generation
+    // @todo Test suite for entropy calculation
+} // End namespace Password
 
-#include <boost/optional.hpp>
-#include <boost/program_options.hpp>
-
-/** Include Microsoft's Guideline Support Library (GSL). 
-*
-*  The Guideline Support Library (GSL) contains functions and types that are
-*  suggested for use by the C++ Core Guidelines maintained by the Standard C++
-*  Foundation. This repo contains Microsoft's implementation of GSL.
-*
-*  The library includes types like span<T>, string_span, owner<> and others.
-*
-*  The entire implementation is provided inline in the headers under the gsl
-*  directory. The implementation generally assumes a platform that implements
-*  C++14 support. There are specific workarounds to support MSVC 2015.
-*
-*  While some types have been broken out into their own headers
-*  (e.g. gsl/span), it is simplest to just include gsl/gsl and gain access to
-*  the entire library.
-*
-*/
-
-#include <gsl/gsl>
-
-// @todo Add GTest documentation link here
-// GTest (https://github.com/google/googletest)
-
-#include <gtest/gtest.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <errno.h>
-#include <signal.h>
-#include <math.h>
-#include <time.h>
-
-/** C++ Standard Library Headers
-*
-*/
-
-#include <chrono>
-#include <iostream>
-#include <limits>
-#include <ratio>
-#include <sstream>
-#include <string>
-#include <string_view>
-#include <vector>
-
-#include "password.h"
-
-#endif // KEYGEN_KEYGEN_H_
-
+#endif // KEYGEN_PASSWORD_H_
