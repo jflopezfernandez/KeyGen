@@ -34,8 +34,8 @@
 *  ***************************************************************************
 *
 *  @author Jose Fernando Lopez Fernandez
-*  @date 15-June-2018
-*  @brief This is the main keygen driver file
+*  @date 18-June-2018
+*  @brief This file contains the password structure and configuration.
 *
 *  Tasks:
 *      1. @todo Add file details
@@ -43,59 +43,103 @@
 *
 *  **************************************************************************/
 
-#ifndef KEYGEN_PASSWORD_H_
-#define KEYGEN_PASSWORD_H_
+#ifndef KEYGEN_INCLUDE_PASSWORD_H_
+#define KEYGEN_INCLUDE_PASSWORD_H_
 
+#include <cmath>
 #include <string>
 
 namespace KeyGen
 {
-    class PasswordRequirements {
-        size_t  m_minimumLength;
-        size_t  m_maximumLength;
-
-        double m_minimumEntropy;
-        double m_maximumEntropy;
-
-    public:
-        auto  minimumLength() const noexcept { return m_minimumLength; }
-        auto  maximumLength() const noexcept { return m_maximumLength; }
-
-        auto minimumEntropy() const noexcept { return m_minimumEntropy; }
-        auto maximumEntropy() const noexcept { return m_maximumEntropy; }
-    };
-
-    class Password {
-        size_t m_length;
-        std::string text;
-
-        double m_ShannonEntropy;
-
-    public:
-
-
-        auto length() const noexcept { return m_length; }
-    };
-}
-
-// @todo Implement password as class
-// @todo Design password class
-namespace nsPassword
-{
-    inline double calculateShannonEntropy(const std::string_view& password, const size_t charSetSize) noexcept
+    namespace Passwords
     {
-        return (password.length() * (log(95) / log(2)));
-    }
+        struct Properties {
+            static constexpr auto DEFAULT_MIN_LENGTH =  8;
+            static constexpr auto DEFAULT_MAX_LENGTH = 16;
+        };
 
-    // @todo Implement generatePassword()
-    // @todo Add the ability to specify legal character set
-    /*std::string generatePassword(const std::size_t characters, const double minimumEntropy) noexcept
-    {
-        return "NULL";
-    }*/
+        struct DefaultConfiguration {
+            static constexpr auto DEFAULT_QUANTITY   = 10;
+        };
 
-    // @todo Test suite for password generation
-    // @todo Test suite for entropy calculation
-} // End namespace nsPassword
+        class Requirements {
+            size_t  m_minimumLength;
+            size_t  m_maximumLength;
 
-#endif // KEYGEN_PASSWORD_H_
+            double m_minimumEntropy;
+            double m_maximumEntropy;
+
+        public:
+            // @todo Add function doc
+            Requirements()
+                :    m_minimumLength { Properties::DEFAULT_MIN_LENGTH }, 
+                     m_maximumLength { Properties::DEFAULT_MAX_LENGTH },
+                    m_minimumEntropy { 40 },
+                    m_maximumEntropy { 80 }
+            {
+                // Default constructor
+            }
+
+            auto  minimumLength() const noexcept { return  m_minimumLength; }
+            auto  maximumLength() const noexcept { return  m_maximumLength; }
+
+            auto minimumEntropy() const noexcept { return m_minimumEntropy; }
+            auto maximumEntropy() const noexcept { return m_maximumEntropy; }
+        };
+
+        class Password {
+            size_t m_length;
+            
+            std::string m_text;
+
+            double m_ShannonEntropy;
+
+            // Note: This could be a static function
+            double calculateShannonEntropy() const noexcept
+            {
+                return (m_text.length() * (std::log(95) / std::log(2)));
+            }
+
+            void setShannonEntropy() noexcept
+            {
+                m_ShannonEntropy = calculateShannonEntropy();
+            }
+
+        public:
+            // @todo Actually implement default constructor
+            // @todo Fix this constructor; it currently initializes with magic
+            // numbers, and only one parameter
+            Password()
+                : m_length(12)
+            {
+                m_text = "abcdefghijkl";
+
+                // @todo Fix this setup; Visual Studio gives warning saying
+                // m_ShannonEntropy is not initialized when I use the setShann.
+                // Entropy() function, so I'm currently doing it like this
+
+                // @todo Fix entropy calculation; gives value of 78.8383 when in reality
+                // it would be much lower for a password as basic as 'abcdefghijkl'
+                m_ShannonEntropy = calculateShannonEntropy();
+            }
+
+            // @todo Create constructor that can specify length, entropy, etc.
+            //Password(const size_t length, const double entropy) { ... }
+
+            auto length() const noexcept { return m_length; }
+
+            auto text() const noexcept { return m_text; }
+
+            auto ShannonEntropy() const noexcept { return m_ShannonEntropy; }
+
+            std::string operator()() const noexcept { return m_text; }
+
+            friend std::ostream& operator<<(std::ostream& outputStream, const Password& password)
+            {
+                return outputStream << password();
+            }
+        };
+    } // Namespace Passwords
+} // Namespace KeyGen
+
+#endif // KEYGEN_INCLUDE_PASSWORD_H_

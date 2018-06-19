@@ -49,14 +49,17 @@
  *
  *  ***************************************************************************
  *
- *   @todo Main program functionality
+ *   Application Task List:
  *   1. @todo Calculate password entropy
  *   2. @todo Generate a password
  *   3. @todo Add program options
  *      a. @todo Specify number of passwords to generate
  *   4. @todo Set minimum tolerable entropy for generated passwords
  *   5. @todo Initialize pseudo-random number generator
- * 
+ *   6. @todo Implement main
+ *   7. @todo Validate cmd line args
+ *   8. @todo Enumerate possible cmd line args
+ *   
  *  Password entropy = log(2)(pool of unique characters^number of characters in
  *  password)
  *
@@ -64,168 +67,15 @@
 
 #include "keygen.h"
 
-#pragma region PROGRAM_CONFIG
-/** @struct GlobalConstants 
- *  @brief This struct declares constants without polluting the global
- *  namespace.
- *
- */
-
-struct GlobalConstants {
-    static constexpr auto NUMBER_OF_PRINTABLE_CHARACTERS = 95;
-};
-
-struct PasswordsProperties {
-    // Hard coded limits
-    static constexpr auto DEFAULT_PASSWORDS_LENGTH_MIN =    4;
-    static constexpr auto DEFAULT_PASSWORDS_LENGTH_MAX = 4096;
-};
-
-struct DefaultConfiguration {
-    // User default configuration
-    static constexpr auto DEFAULT_PASSWORDS_AMOUNT = 10u;
-    static constexpr auto DEFAULT_PASSWORDS_LENGTH = 12u;
-};
-
-class Version {
-    using Number = unsigned int;
-
-    const Number m_major = 0;
-    const Number m_minor = 1;
-    const Number m_build = 0;
-
-public:
-    auto major() const noexcept -> decltype (auto) { return _major; }
-    auto minor() const noexcept -> decltype (auto) { return _minor; }
-    auto build() const noexcept -> decltype (auto) { return _build; }
-
-    friend std::ostream& operator<<(std::ostream& outputStream, const Version& version) noexcept
-    {
-        return outputStream << version.major() << "." << version.minor() << "." << version.build();
-    }
-};
-
-const Version ProgramVersion;
-
-namespace ProgramOptions = boost::program_options;
-using OptionsDescription = boost::program_options::options_description;
-
-#pragma endregion
-
-#pragma region ERROR
-
-void LogMsg(const std::string_view& message)
+int main()
 {
-    std::clog << "[LOG]: " << message << "\n";
-}
+    const KeyGen::Passwords::Requirements passwordRequirements;
+    const KeyGen::Passwords::Password     defaultPassword;
 
-#pragma endregion 
+    std::cout << "\n";
+    std::cout << "Default Password: " << defaultPassword << "\n";
+    std::cout << "\tEntropy: "        << defaultPassword.ShannonEntropy() 
+              << "\n\n";
 
-#pragma region COMMAND_LINE_OPTS
-
-void PrintHelp() noexcept
-{
-    // @todo Implement PrintHelp() function
-    std::cout << "<Print Help>\n";
-
-    exit(EXIT_FAILURE);
-}
-
-void PrintVersion() noexcept
-{
-    // @todo Implement PrintVersion()
-    std::cout << "\n\n\t\t\t";
-    std::cout << "KeyGen - Version " << ProgramVersion << "\n\t\t";
-    std::cout << "Jose Fernando Lopez Fernandez" << "\n";
-
-    exit(EXIT_FAILURE);
-}
-
-#pragma endregion
-
-namespace Dummy
-{
-    TEST(TestingGTestConfiguration, ReturnsOne)
-    {
-        EXPECT_EQ(1, 1);
-    }
-
-    TEST(TestingGTestConfiguration, ReturnsTwo)
-    {
-        EXPECT_EQ(2, 2);
-    }
-} // namespace Dummy
-
-int main(int argc, char *argv[])
-{
-#pragma region PROGRAM_OPTIONS
-    std::size_t numberOfPasswordsToGenerate = DefaultConfiguration::DEFAULT_PASSWORDS_AMOUNT;
-    std::size_t passwordLength              = DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH;
-
-    OptionsDescription options("Generic options");
-    options.add_options()
-        // @todo Reenable this option once GTest bugs have been ironed out
-        //("help,h", "Display this help dialog")
-        ("version", "Display program version and exit")
-        ("verbose,v", "Set program output verbosity to 'verbose'")
-        ("number-to-generate,N", ProgramOptions::value<std::size_t>(&numberOfPasswordsToGenerate)->default_value(10), "Number of cryptographically strong passwords for the application to generate")
-        ("password-length,l", ProgramOptions::value<std::size_t>(&passwordLength)->default_value(12), "Length of the passwords to generate")
-    ; // End of genericOptions.add_options()
-
-    ProgramOptions::variables_map map;
-    ProgramOptions::store(ProgramOptions::parse_command_line(argc, argv, options), map);
-    ProgramOptions::notify(map);
-
-    if (map.count("help")) {
-        PrintHelp();
-    }
-
-    if (map.count("version")) {
-        PrintVersion();
-    }
-
-    if (map.count("verbose")) {
-        std::stringstream stream;
-
-        stream << "Number of passwords to generate: " << numberOfPasswordsToGenerate << "\n";
-
-        LogMsg(stream.str());
-    }
-
-    // @todo Validate number of passwords to generate
-    if (map.count("number-to-generate")) {
-        if (numberOfPasswordsToGenerate < 1) {
-            std::cerr << "Number of passwords to generate was too low (" << numberOfPasswordsToGenerate << ").\n";
-            std::cerr << "Reverting back to default configuration: \n";
-
-            // @todo Actually reset numberOfPasswordsToGenerate
-            numberOfPasswordsToGenerate = DefaultConfiguration::DEFAULT_PASSWORDS_AMOUNT;
-
-            std::cerr << "\t - Number of passwords to generate: " << numberOfPasswordsToGenerate << "\n\n";
-        }
-
-        // @todo Handle too high an amount
-    }
-
-    // @todo Validate password length
-    if (map.count("length")) {
-        if (passwordLength < PasswordsProperties::DEFAULT_PASSWORDS_LENGTH_MIN) {
-            // Handle passwords too short
-            std::cerr << "The specified password length is shorter than the lowest allowable length (" << PasswordsProperties::DEFAULT_PASSWORDS_LENGTH_MIN << "); \n";
-            std::cerr << "reverting back to the default password length: " << DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH << "\n\n";
-            
-            passwordLength = DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH;
-        } else if (passwordLength > PasswordsProperties::DEFAULT_PASSWORDS_LENGTH_MAX) {
-            // Handle passwords too long
-            std::cerr << "The specified password length is higher than the allowable maximum (" << PasswordsProperties::DEFAULT_PASSWORDS_LENGTH_MAX << "); \n";
-            std::cerr << "reverting back to the default password length: " << DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH << "\n\n";
-
-            passwordLength = DefaultConfiguration::DEFAULT_PASSWORDS_LENGTH;
-        }
-    }
-#pragma endregion
-
-    ::testing::InitGoogleTest(&argc, argv);
-
-    return RUN_ALL_TESTS();
+    return EXIT_SUCCESS;
 }
