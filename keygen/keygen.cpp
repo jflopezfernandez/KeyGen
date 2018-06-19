@@ -90,9 +90,9 @@ struct DefaultConfiguration {
 class Version {
     using Number = unsigned int;
 
-    const Number _major = 0;
-    const Number _minor = 1;
-    const Number _build = 0;
+    const Number m_major = 0;
+    const Number m_minor = 1;
+    const Number m_build = 0;
 
 public:
     auto major() const noexcept -> decltype (auto) { return _major; }
