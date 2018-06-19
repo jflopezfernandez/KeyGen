@@ -1,0 +1,11 @@
+
+#ifndef KEYGEN_INCLUDE_VERSION_H_
+#define KEYGEN_INCLUDE_VERSION_H_
+
+#include <string>
+
+auto getVersion() noexcept -> decltype (auto) {
+    return "@KeyGen_VERSION@";
+}
+
+#endif // KEYGEN_INCLUDE_VERSION_H_

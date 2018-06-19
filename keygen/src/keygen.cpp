@@ -66,6 +66,7 @@
  *  **************************************************************************/
 
 #include "keygen.h"
+#include "version.h"
 
 int main()
 {
@@ -76,6 +77,9 @@ int main()
     std::cout << "Default Password: " << defaultPassword << "\n";
     std::cout << "\tEntropy: "        << defaultPassword.ShannonEntropy() 
               << "\n\n";
+
+    // Testing generating configuration file:
+    std::cout << "Version 2: " << getVersion() << "\n\n";
 
     return EXIT_SUCCESS;
 }

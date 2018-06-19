@@ -11,9 +11,9 @@
       "generator": "Visual Studio 15 2017",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x86" ],
-      "buildRoot": "${env.BuildDir}\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
-      "buildCommandArgs": "'C:\\Program Files\\CMake\\bin\\cmake.exe' -m -v:minimal",
+      "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
       "variables": [
         {
@@ -31,7 +31,7 @@
       "generator": "Visual Studio 15 2017",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x86" ],
-      "buildRoot": "${env.BuildDir}\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",

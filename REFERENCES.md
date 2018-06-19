@@ -7,3 +7,5 @@ References:
 	December 2011
 	[Source](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-63ver1.0.2.pdf)
 
+2.  Password Complexity Versus Password Entropy
+    Cam - https://blogs.technet.microsoft.com/msftcam/2015/05/19/password-complexity-versus-password-entropy/
