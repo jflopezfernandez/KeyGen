@@ -46,11 +46,41 @@
 #ifndef KEYGEN_PASSWORD_H_
 #define KEYGEN_PASSWORD_H_
 
-// @todo Add file content
+#include <string>
+
+namespace KeyGen
+{
+    class PasswordRequirements {
+        size_t  m_minimumLength;
+        size_t  m_maximumLength;
+
+        double m_minimumEntropy;
+        double m_maximumEntropy;
+
+    public:
+        auto  minimumLength() const noexcept { return m_minimumLength; }
+        auto  maximumLength() const noexcept { return m_maximumLength; }
+
+        auto minimumEntropy() const noexcept { return m_minimumEntropy; }
+        auto maximumEntropy() const noexcept { return m_maximumEntropy; }
+    };
+
+    class Password {
+        size_t m_length;
+        std::string text;
+
+        double m_ShannonEntropy;
+
+    public:
+
+
+        auto length() const noexcept { return m_length; }
+    };
+}
 
 // @todo Implement password as class
 // @todo Design password class
-namespace Password
+namespace nsPassword
 {
     inline double calculateShannonEntropy(const std::string_view& password, const size_t charSetSize) noexcept
     {
@@ -59,13 +89,13 @@ namespace Password
 
     // @todo Implement generatePassword()
     // @todo Add the ability to specify legal character set
-    std::string generatePassword(const std::size_t characters, const double minimumEntropy) noexcept
+    /*std::string generatePassword(const std::size_t characters, const double minimumEntropy) noexcept
     {
         return "NULL";
-    }
+    }*/
 
     // @todo Test suite for password generation
     // @todo Test suite for entropy calculation
-} // End namespace Password
+} // End namespace nsPassword
 
 #endif // KEYGEN_PASSWORD_H_

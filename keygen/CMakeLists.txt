@@ -56,34 +56,11 @@ IF (DEBUG_BUILD)
 	MESSAGE ("Debug mode enabled...")
 ENDIF ()
 
-FIND_PACKAGE (GTest REQUIRED)
-
 SET (Boost_USE_STATIC_LIBS OFF)
 SET (Boost_USE_MULTITHREADED ON)
 SET (Boost_USE_STATIC_RUNTIME OFF)
 
 FIND_PACKAGE (Boost 1.67.0 REQUIRED program_options)
-
-IF (WIN32)
-	MESSAGE ("Compiling on Windows platform...")
-ENDIF ()
-
-SET (SOURCE_HEADERS
-	include/keygen.h
-)
-
-SET (SOURCE_FILES
-	${SOURCE_HEADERS}
-	keygen.cpp
-)
-
-ADD_EXECUTABLE (${PROJECT_NAME}
-	${SOURCE_FILES}
-	${WITH_STRING_VIEW}
-	${SOURCE_HEADERS}
-	${GTEST_INCLUDE_DIRS}
-	${Boost_INCLUDE_DIRS}
-)
 
 IF (Boost_FOUND)
 	MESSAGE ("Successfully found Boost")
@@ -95,6 +72,37 @@ ENDIF ()
 
 SET (BOOST_OPTIONAL_INCLUDE_DIR
 	"C:\\Source-Code\\vcpkg\\packages\\boost-optional_x64-windows\\include\\"
+)
+
+FIND_PACKAGE (GTest REQUIRED)
+
+IF (WIN32)
+	MESSAGE ("Building for Windows platform...")
+ENDIF ()
+
+ADD_LIBRARY (GSL INTERFACE)
+
+SET (SOURCE_HEADERS
+	include/keygen.h
+	include/password.h
+)
+
+SET (SOURCE_TESTS
+    tests/password-generation.cpp
+)
+
+SET (SOURCE_FILES
+	${SOURCE_HEADERS}
+	${SOURCE_TESTS}
+	keygen.cpp
+)
+
+ADD_EXECUTABLE (${PROJECT_NAME}
+	${SOURCE_FILES}
+	${WITH_STRING_VIEW}
+	${SOURCE_HEADERS}
+	${GTEST_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 )
 
 #ADD_LIBRARY (StrView INTERFACE)

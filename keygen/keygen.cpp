@@ -154,7 +154,7 @@ namespace Dummy
     {
         EXPECT_EQ(2, 2);
     }
-}
+} // namespace Dummy
 
 int main(int argc, char *argv[])
 {
