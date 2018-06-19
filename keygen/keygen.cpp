@@ -61,9 +61,36 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
+ /** Include Microsoft's Guideline Support Library (GSL). 
+ *
+ *  The Guideline Support Library (GSL) contains functions and types that are
+ *  suggested for use by the C++ Core Guidelines maintained by the Standard C++
+ *  Foundation. This repo contains Microsoft's implementation of GSL.
+ *
+ *  The library includes types like span<T>, string_span, owner<> and others.
+ *
+ *  The entire implementation is provided inline in the headers under the gsl
+ *  directory. The implementation generally assumes a platform that implements
+ *  C++14 support. There are specific workarounds to support MSVC 2015.
+ *
+ *  While some types have been broken out into their own headers
+ *  (e.g. gsl/span), it is simplest to just include gsl/gsl and gain access to
+ *  the entire library.
+ *
+ */
+
+#include <gsl/gsl>
+
 #ifndef NDEBUG
+
+// @todo Add GTest documentation link here
+// GTest (https://github.com/google/googletest)
+
 #include <gtest/gtest.h>
+
 #endif // NDEBUG
+
+#include <iostream>
 
 struct GlobalConstants {
     static constexpr auto NUMBER_OF_PRINTABLE_CHARACTERS = 95;
@@ -152,7 +179,7 @@ namespace StringOperations
         }
 
         return false;
-    }
+    } // End: AisASubstringOfB(const char *testString, const char *hostString)
 
 #ifndef NDEBUG
     TEST(SubstringTest, NotASubstring)
@@ -317,6 +344,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    // @todo Initialize pseudo-random number generator
+
 #ifndef NDEBUG
     testing::InitGoogleTest(&argc, argv);
 #endif
@@ -347,14 +376,25 @@ int main(int argc, char *argv[])
     errno_t err = _localtime64_s(&newtime, &long_time);
 
     if (err) {
-        fprintf(stderr, "OOps\n");
+        // @todo Improve error message
+        std::cerr << "Oops\n";
 
         exit(EXIT_FAILURE);
     }
 
     // Convert from 24 to 12 hour clock
     if (newtime.tm_hour > 12) {
-        strcpy_s(am_pm, sizeof am_pm, "PM");
+        /** The original code violates C26485: No Array to Pointer Decay
+         *  
+         *  strcpy_s(am_pm, sizeof am_pm, "PM");
+         *
+         *  While normally a Span<T> is the method desired in this situation,
+         *  the C API predates this function call, so this static cast was the 
+         *  compromise between compatibility and type-safety.
+         *
+         */
+
+        strcpy_s(static_cast<char *>(am_pm), sizeof am_pm, "PM");
     }
 
     if (newtime.tm_hour > 12) {
@@ -366,16 +406,17 @@ int main(int argc, char *argv[])
     }
 
     // Convert to an ASCII representation
-    err = asctime_s(timebuf, 26, &newtime);
+    err = asctime_s(static_cast<char *>(timebuf), 26, &newtime);
 
     if (err) {
-        fprintf(stderr, "oops2\n");
+        // @todo Improve error message
+        std::cerr << "oops 2 \n";
 
         exit(EXIT_FAILURE);
     }
 
-    printf("%.19s %s\n", timebuf, am_pm);
-
+    std::cout << static_cast<char *>(timebuf) << static_cast<char *>(am_pm) << '\n';
+    
 #ifndef NDEBUG
     return RUN_ALL_TESTS();
 #else
