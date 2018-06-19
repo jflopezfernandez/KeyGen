@@ -154,7 +154,7 @@ using OptionsDescription = boost::program_options::options_description;
 
 void LogMsg(const std::string_view& message)
 {
-    std::cout << "[LOG]: " << message << "\n";
+    std::clog << "[LOG]: " << message << "\n";
 }
 
 namespace StringOperations
