@@ -66,13 +66,13 @@ namespace System
          *  
          */
 
-        const auto Windows              = "1";
-        const auto Apple                = "";
-        const auto Unix                 = "";
+        const auto Windows              = "@CMAKE_HOST_WIN32@";
+        const auto Apple                = "@CMAKE_HOST_APPLE@";
+        const auto Unix                 = "@CMAKE_HOST_UNIX@";
 
         namespace Processor
         {
-            const auto Architecture     = "AMD64";
+            const auto Architecture     = "@CMAKE_HOST_SYSTEM_PROCESSOR@";
         } // namespace Processor
     } // namespace Host
 
@@ -82,41 +82,69 @@ namespace System
         {
             namespace C
             {
-                const auto Name         = "";
-                const auto Version      = "";
-                const auto Standard     = "";
-                const auto StandardReq  = "";
-                const auto Extensions   = "";
-                const auto Features     = "";
-                const auto FlagsBase    = "";
-                const auto FlagsDebug   = "";
-                const auto FlagsRelease = "";
-                const auto IncludesDir  = "";
-                const auto StandardLib  = "";
+                const auto Name         = "@CMAKE_C_COMPILER_ID@";
+                const auto Version      = "@CMAKE_C_COMPILER_VERSION@";
+                const auto Standard     = "@CMAKE_C_STANDARD@";
+                const auto StandardReq  = "@CMAKE_C_STANDARD_REQUIRED@";
+                const auto Extensions   = "@CMAKE_C_EXTENSIONS@";
+                const auto Features     = "@CMAKE_C_COMPILE_FEATURES@";
+                const auto FlagsBase    = "@CMAKE_C_COMPILER_FLAGS@";
+                const auto FlagsDebug   = "@CMAKE_C_COMPILER_FLAGS_DEBUG@";
+                const auto FlagsRelease = "@CMAKE_C_COMPILER_FLAGS_RELEASE@";
+                const auto IncludesDir  = "@CMAKE_C_STANDARD_INCLUDE_DIRECTORIES@";
+                const auto StandardLib  = "@CMAKE_C_STANDARD_LIBRARIES@";
 
                 inline void Print() noexcept
                 {
-                    std::cout << "<C Compiler Info>\n\n";
+                    std::cout << "\n";
+                    std::cout << "--C Compiler Info--\n";
+                    std::cout << "\t" << Name << "\n";
+                    std::cout << "\t" << Version << "\n";
+                    std::cout << "\t" << Standard << "\n";
+                    std::cout << "\t" << StandardReq << "\n";
+                    std::cout << "\t" << Extensions << "\n";
+                    std::cout << "\t" << Features << "\n";
+                    std::cout << "\t" << FlagsBase << "\n";
+                    std::cout << "\t" << FlagsDebug << "\n";
+                    std::cout << "\t" << FlagsRelease << "\n";
+                    std::cout << "\t" << IncludesDir << "\n";
+                    std::cout << "\t" << StandardLib << "\n";
+                    std::cout << "\n";
+
                 }
             } // namespace C
 
             namespace CXX
             {
-                const auto Name         = "MSVC";
-                const auto Version      = "19.14.26430.0";
-                const auto Standard     = "";
-                const auto StandardReq  = "";
-                const auto Extensions   = "";
-                const auto Features     = "cxx_std_11;cxx_std_98;cxx_aggregate_default_initializers;cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_attribute_deprecated;cxx_auto_type;cxx_binary_literals;cxx_constexpr;cxx_contextual_conversions;cxx_decltype;cxx_decltype_auto;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_digit_separators;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_generic_lambdas;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_lambda_init_captures;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_return_type_deduction;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_template_template_parameters;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variable_templates;cxx_variadic_macros;cxx_variadic_templates;cxx_std_14;cxx_std_17";
-                const auto FlagsBase    = "";
-                const auto FlagsDebug   = "";
-                const auto FlagsRelease = "";
-                const auto IncludesDir  = "";
-                const auto StandardLib  = "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib";
+                const auto Name         = "@CMAKE_CXX_COMPILER_ID@";
+                const auto Version      = "@CMAKE_CXX_COMPILER_VERSION@";
+                const auto Standard     = "@CMAKE_CXX_STANDARD@";
+                const auto StandardReq  = "@CMAKE_CXX_STANDARD_REQUIRED@";
+                const auto Extensions   = "@CMAKE_CXX_EXTENSIONS@";
+                const auto Features     = "@CMAKE_CXX_COMPILE_FEATURES@";
+                const auto FlagsBase    = "@CMAKE_CXX_COMPILER_FLAGS@";
+                const auto FlagsDebug   = "@CMAKE_CXX_COMPILER_FLAGS_DEBUG@";
+                const auto FlagsRelease = "@CMAKE_CXX_COMPILER_FLAGS_RELEASE@";
+                const auto IncludesDir  = "@CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES@";
+                const auto StandardLib  = "@CMAKE_CXX_STANDARD_LIBRARIES@";
 
                 inline void Print() noexcept
                 {
-                    std::cout << "<CXX Compiler Info>\n\n";
+                    std::cout << "\n";
+                    std::cout << "--C Compiler Info--\n";
+                    std::cout << "\t" << Name << "\n";
+                    std::cout << "\t" << Version << "\n";
+                    std::cout << "\t" << Standard << "\n";
+                    std::cout << "\t" << StandardReq << "\n";
+                    std::cout << "\t" << Extensions << "\n";
+                    std::cout << "\t" << Features << "\n";
+                    std::cout << "\t" << FlagsBase << "\n";
+                    std::cout << "\t" << FlagsDebug << "\n";
+                    std::cout << "\t" << FlagsRelease << "\n";
+                    std::cout << "\t" << IncludesDir << "\n";
+                    std::cout << "\t" << StandardLib << "\n";
+                    std::cout << "\n";
+
                 }
             } // namespace CXX
         } // namespace Compilers
@@ -129,7 +157,7 @@ namespace KeyGen
     {
         namespace Metadata
         {
-            const std::string description = "Cross-platform password generator written in C++.";
+            const std::string description = "@PROJECT_DESCRIPTION@";
         }
 
         // @todo Change to string_view
@@ -151,10 +179,10 @@ namespace KeyGen
 
     namespace Version
     {
-        const std::string Major = "0";
-        const std::string Minor = "2";
-        const std::string Patch = "0";
-        const std::string Tweak = "0";
+        const std::string Major = "@KeyGen_VERSION_MAJOR@";
+        const std::string Minor = "@KeyGen_VERSION_MINOR@";
+        const std::string Patch = "@KeyGen_VERSION_PATCH@";
+        const std::string Tweak = "@KeyGen_VERSION_TWEAK@";
 
         inline std::string String() noexcept
         {

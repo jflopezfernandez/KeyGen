@@ -65,11 +65,16 @@
  *
  *  **************************************************************************/
 
-#include "keygen.h"
-#include "version.h"
+#include "../include/keygen.h"
 
 int main()
 {
+    KeyGen::Program::PrintDescription();
+    KeyGen::Version::Print();
+
+    System::Toolchains::Compilers::C::Print();
+    System::Toolchains::Compilers::CXX::Print();
+
     const KeyGen::Passwords::Requirements passwordRequirements;
     const KeyGen::Passwords::Password     defaultPassword;
 
@@ -77,9 +82,6 @@ int main()
     std::cout << "Default Password: " << defaultPassword << "\n";
     std::cout << "\tEntropy: "        << defaultPassword.ShannonEntropy() 
               << "\n\n";
-
-    // Testing generating configuration file:
-    std::cout << "Version 2: " << getVersion() << "\n\n";
 
     return EXIT_SUCCESS;
 }

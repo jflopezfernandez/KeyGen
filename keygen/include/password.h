@@ -46,6 +46,7 @@
 #ifndef KEYGEN_INCLUDE_PASSWORD_H_
 #define KEYGEN_INCLUDE_PASSWORD_H_
 
+#include <iostream>
 #include <cmath>
 #include <string>
 

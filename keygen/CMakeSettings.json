@@ -13,7 +13,7 @@
       "inheritEnvironments": [ "msvc_x86" ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
-      "buildCommandArgs": "-m -v:minimal",
+      "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
@@ -33,7 +33,7 @@
       "inheritEnvironments": [ "msvc_x86" ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
-      "buildCommandArgs": "-m -v:minimal",
+      "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
@@ -54,12 +54,12 @@
       //"buildRoot": "${env.BuildDir}\\${name}",
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "-T host=x64",
-      "buildCommandArgs": "-m -v:minimal",
+      "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\Source-Code\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+          "value": "C:/Source-Code/vcpkg/scripts/buildsystems/vcpkg.cmake"
         },
         {
           "name": "PROJECT_NAME",
@@ -72,9 +72,9 @@
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${env.BuildDir}\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "-T host=x64",
-      "buildCommandArgs": "-m -v:minimal",
+      "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
